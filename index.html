@@ -10,27 +10,23 @@
   <button id="scanBtn" style="padding:0.5rem;">Scan</button>
   <pre id="result" style="margin-top:1rem; background:#f0f0f0; padding:1rem;"></pre>
 
-  <script>
-    document.getElementById("scanBtn").onclick = async () => {
-      const domain = document.getElementById("domain").value.trim();
-      if (!domain) return alert("Enter a domain");
-      document.getElementById("result").textContent = "Scanning...";
+ <script>
+  document.getElementById("scanBtn").onclick = async () => {
+    const domain = document.getElementById("domain").value.trim();
+    if (!domain) return alert("Enter a domain");
 
-      try {
-        const res = await fetch("https://eov6hwk58boeo3a.m.pipedream.net", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ domain: domain })  // <-- Fix is here
-        });
+    const res = await fetch("https://eov6hwk58boeo3a.m.pipedream.net", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ domain: domain }) // 🔥 THIS IS THE FIX!
+    });
 
-        if (!res.ok) throw new Error("Server responded with " + res.status);
+    const data = await res.json();
+    document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+  };
+</script>
 
-        const data = await res.json();
-        document.getElementById("result").textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        document.getElementById("result").textContent = "❌ Error: " + err.message;
-      }
-    };
-  </script>
 </body>
 </html>
