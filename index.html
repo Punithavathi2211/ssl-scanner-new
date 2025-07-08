@@ -12,7 +12,7 @@
 
   <script>
     document.getElementById("scanBtn").onclick = async () => {
-      const domain = document.getElementById("domain").value;
+      const domain = document.getElementById("domain").value.trim();
       if (!domain) return alert("Enter a domain");
       document.getElementById("result").textContent = "Scanning...";
 
@@ -20,7 +20,7 @@
         const res = await fetch("https://eov6hwk58boeo3a.m.pipedream.net", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ domain })
+          body: JSON.stringify({ domain: domain })  // <-- Fix is here
         });
 
         if (!res.ok) throw new Error("Server responded with " + res.status);
