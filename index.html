@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SSL Scanner</title>
 </head>
-<body style="font-family: sans-serif; padding: 2rem;">
+<body style="font-family:sans-serif;padding:2rem">
   <h1>🔒 SSL Scanner</h1>
-  <input id="domain" placeholder="example.com" style="padding:0.5rem; width:200px;">
+  <input id="domain" placeholder="example.com" style="padding:0.5rem; width:250px;">
   <button id="scanBtn" style="padding:0.5rem;">Scan</button>
   <pre id="result" style="margin-top:1rem; background:#f0f0f0; padding:1rem;"></pre>
 
- <script>
-  document.getElementById("scanBtn").onclick = async () => {
-    const domain = document.getElementById("domain").value.trim();
-    if (!domain) return alert("Enter a domain");
+  <script>
+    document.getElementById("scanBtn").onclick = async () => {
+      const domain = document.getElementById("domain").value.trim();
+      if (!domain) return alert("Please enter a domain");
 
-    const res = await fetch("https://eov6hwk58boeo3a.m.pipedream.net", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ domain: domain }) // 🔥 THIS IS THE FIX!
-    });
+      document.getElementById("result").textContent = "🔄 Scanning...";
 
-    const data = await res.json();
-    document.getElementById("result").textContent = JSON.stringify(data, null, 2);
-  };
-</script>
+      try {
+        const res = await fetch("https://eov6hwk58boeo3a.m.pipedream.net", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ domain: domain })  // ⚠️ THIS LINE IS KEY
+        });
 
+        const data = await res.json();
+        document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById("result").textContent = "❌ Error: " + err.message;
+      }
+    };
+  </script>
 </body>
 </html>
